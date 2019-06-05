@@ -1,15 +1,16 @@
 from flask_restful import Resource
 from models.event import EventModel
 
-from flask import request
+from flask import request, render_template, make_response
 import json
 
 
 class Event(Resource):
     """ Parser """
     def parse_to_new_event(self, query):
-        data = request.data.decode('utf-8')
-        data_dic = json.loads(data)
+        data_dic = request.form
+        # data = request.data.decode('utf-8')
+        # data_dic = json.loads(data)
         event = EventModel(
             data_dic["date"],
             data_dic["adv_origin"],
@@ -54,6 +55,8 @@ class Event(Resource):
         return {'message': 'event not found'}, 404
     """ GET """
 
+
+
     """ POST """
     def post(self, query):
         event = self.parse_to_new_event(query)
@@ -63,7 +66,10 @@ class Event(Resource):
                 event.save_to_db()
             except:
                 return {"message": "An error occurred inserting the item."}, 500
-            return event.json()
+            events = [event.json() for event in EventModel.query.order_by(EventModel.eventID).all()]
+            headers = {'content-type': 'text/html'}
+            return make_response(render_template("event_feed.html", events=events), 200, headers)
+            # return event.json()
         return {'message': 'event by that reference already exists'}, 400
     """ POST """
 
@@ -88,11 +94,35 @@ class Event(Resource):
 
     """ PUT """
 
+class GetEventByParamaters(Resource):
+    """ GET """
+    def get(self, query):
+
+        date = request.args.get('date')
+        adv_origin = request.args.get('adv_origin')
+        adv_organization = request.args.get('adv_organization')
+        adv_camp = request.args.get('adv_camp')
+        target_sector = request.args.get('target_sector')
+        target_name = request.args.get('target_name')
+        target_origin = request.args.get('target_origin')
+        reference = request.args.get('reference')
+        status = request.args.get('status')
+        details = request.args.get('details')
+        type = request.args.get('type')
+        reporter = request.args.get('reporter')
+
+        if date:
+            response = EventModel.query.filter_by(date=date)
+        if adv_origin:
+            response = EventModel.query.filter_by(adv_origin=adv_origin)
+
 
 class eventList(Resource):
     """ GET """
     def get(self):
-        return {'events': [event.json() for event in EventModel.query.order_by(EventModel.eventID).all()]}
+        events = [event.json() for event in EventModel.query.order_by(EventModel.eventID).all()]
+        headers = {'content-type': 'text/html'}
+        return make_response(render_template("event_feed.html", events=events), 200, headers)
     """ GET """
 
 
