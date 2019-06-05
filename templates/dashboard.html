@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+     <style>
+body {font-family: Arial;}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+</style>
+    <title>Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script>
+        function decodeUtf16(w) {
+    var i = 0;
+    var len = w.length;
+    var w1, w2;
+    var charCodes = [];
+    while (i < len) {
+        var w1 = w[i++];
+        if ((w1 & 0xF800) !== 0xD800) { // w1 < 0xD800 || w1 > 0xDFFF
+            charCodes.push(w1);
+            continue;
+        }
+        if ((w1 & 0xFC00) === 0xD800) { // w1 >= 0xD800 && w1 <= 0xDBFF
+            throw new RangeError('Invalid octet 0x' + w1.toString(16) + ' at offset ' + (i - 1));
+        }
+        if (i === len) {
+            throw new RangeError('Expected additional octet');
+        }
+        w2 = w[i++];
+        if ((w2 & 0xFC00) !== 0xDC00) { // w2 < 0xDC00 || w2 > 0xDFFF)
+            throw new RangeError('Invalid octet 0x' + w2.toString(16) + ' at offset ' + (i - 1));
+        }
+        charCodes.push(((w1 & 0x3ff) << 10) + (w2 & 0x3ff) + 0x10000);
+    }
+    return String.fromCharCode.apply(String, charCodes);
+};
+    </script>
+</head>
+<body dir="rtl">
+
+<div class="tab">
+  <button class="tablinks" onclick="window.location ='http://127.0.0.1:5000/events'">Events List</button>
+  <button class="tablinks" onclick="window.location ='http://127.0.0.1:5000/event_feed'">Enter New Event</button>
+  <button class="tablinks" onclick="window.location ='http://127.0.0.1:5000/dashboard'">Dashboard</button>
+</div>
+
+<div class="row">
+    <div class="column">
+        <span>מתאריך</span>
+        <input type="date" id="from_date" name="from_date">
+        <span>עד</span>
+        <input type="date" id="to_date" name="to_date">
+    </div>
+
+    <table class="table table-striped">
+                <thead>
+                    <tr class="row-name">
+                        <th><h1>מקור תקיפה</h1><select id="adv_origin" name="adv_origin" multiple>
+                            {% for origin in col_list.adv_origin %}
+                                <option value="{{origin}}">{{origin}}</option>
+                            {% endfor %}
+                        </select></th>
+                        <th><h1>יעד</h1><select name="adv_organization" multiple>
+                            {% for adv_organization in col_list.adv_organization %}
+                                <option value="{{adv_organization}}">{{adv_organization}}</option>
+                            {% endfor %}
+                        </select></th>
+                        <th><h1>מערך</h1><select name="adv_camp" multiple>
+                            {% for adv_camp in col_list.adv_camp %}
+                                <option value="{{adv_camp}}">{{adv_camp}}</option>
+                            {% endfor %}
+                            </select>
+                        </th>
+<!--                    </tr>-->
+
+<!--                    <tr class="row-name">-->
+ <th><h1>מגזר נתקף</h1><select  id="target_sector" name="target_sector" multiple>
+                            {% for target_sector in col_list.target_sector %}
+                                <option value="{{target_sector}}">{{target_sector}}</option>
+                            {% endfor %}
+                        </select></th>
+                        <th><h1>שם נתקף</h1><select name="target_name" multiple>
+                            {% for target_name in col_list.target_name %}
+                                <option value="{{target_name}}">{{target_name}}</option>
+                            {% endfor %}
+                        </select></th>
+                        <th><h1>מדינת נתקף</h1><select name="target_origin" multiple>
+                            {% for target_origin in col_list.target_origin %}
+                                <option value="{{target_origin}}">{{target_origin}}</option>
+                            {% endfor %}
+                        </select></th>
+                        <th><h1>סוג תקיפה</h1><select name="type" multiple>
+                            {% for type in col_list.type %}
+                                <option value="{{type}}">{{type}}</option>
+                            {% endfor %}
+                        </select></th>
+                        <th><h1>סימוכין</h1><select name="reference" multiple>
+                            {% for reference in col_list.reference %}
+                                <option value="{{reference}}">{{reference}}</option>
+                            {% endfor %}
+                        </select></th>
+                        <th><h1>סטטוס</h1><select name="status" multiple>
+                              {% for status in col_list.status %}
+                                <option value="{{status}}">{{status}}</option>
+                            {% endfor %}
+                        </select></th>
+                    </tr>
+    </table>
+    </div>
+<div class="container" style="width:400px;height:400px;">
+<canvas id="myChart" width="400" height="400"></canvas>
+    </div>
+
+<div class="container" style="width:400px;height:400px;">
+<canvas id="myChart2" width="400" height="400"></canvas>
+    </div>
+<script>
+
+
+
+var ctx = document.getElementById('myChart');
+
+  var x = document.getElementById("target_sector");
+  var data = [];
+    for (i = 0; i < x.length; i++) {
+        data.push(x.options[i].text);
+    }
+
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: data,
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});
+
+
+var ctx_ = document.getElementById('myChart2');
+
+  var x_ = document.getElementById("adv_origin");
+  var data_ = [];
+    for (i = 0; i < x_.length; i++) {
+        data_.push(x_.options[i].text);
+    }
+
+var myPieChart = new Chart(ctx, {
+    type: 'pie',
+    data: data_,
+    options: data_
+});
+
+</script>
+
+</body>
+</html>
