@@ -75,9 +75,9 @@ class EventModel(db.Model):
     def find_by_reference(cls, reference):
         return cls.query.filter_by(reference=reference).first()
 
-    # @classmethod
-    # def find_by_date(cls, EventDate):
-        # return db.session.query(EventModel).filter(EventModel.EventDate.contains(EventDate))
+    @classmethod
+    def find_by_id(cls, eventID):
+        return cls.query.filter_by(eventID=eventID).first()
     """ Class methods """
 
     """ DB methods """
