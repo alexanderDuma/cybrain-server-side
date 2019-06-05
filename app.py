@@ -1,6 +1,3 @@
-# !/usr/bin/python3.6
-import os
-
 from flask import Flask
 from flask_restful import Api
 from resources.event import *
@@ -9,7 +6,7 @@ from resources.event import *
 """Config"""
 app = Flask(__name__)
 """ will look for DATABAE_URL, if not found will take second arg. """
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:monteCristoCount@localhost/data'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://westbrook135:1q2w3e4r!@localhost/data'
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 api = Api(app)
 """Config"""
@@ -35,5 +32,5 @@ if __name__ == '__main__':
     from db import db
 
     db.init_app(app)
-    app.run(port=5000, debug=True)
+    app.run(host='192.168.1.114', port=5000, debug=True)
 """ Main """
