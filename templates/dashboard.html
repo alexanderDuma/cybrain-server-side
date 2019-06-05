@@ -201,6 +201,8 @@ var myChart = new Chart(ctx, {
 });
 
 
+
+
 var ctx_ = document.getElementById('myChart2');
 
   var x_ = document.getElementById("adv_origin");
@@ -209,10 +211,20 @@ var ctx_ = document.getElementById('myChart2');
         data_.push(x_.options[i].text);
     }
 
-var myPieChart = new Chart(ctx, {
+var datan = {
+    datasets: [{
+        data: [5,2,3,0,5,6,8]
+    }],
+
+    // These labels appear in the legend and in the tooltips when hovering different arcs
+    labels: data_
+
+};
+
+var myPieChart_ = new Chart(ctx_, {
     type: 'pie',
-    data: data_,
-    options: data_
+    data: datan,
+    options: datan
 });
 
 </script>
