@@ -31,6 +31,9 @@ api.add_resource(getAllUniqueColumns, '/event/getAllUniqueColumns')
 api.add_resource(EventFeed, '/event_feed')
 api.add_resource(Dashboard, '/dashboard')
 api.add_resource(Login, '/')
+api.add_resource(GetImage, '/imgs/cybrain_logo.jpg')
+api.add_resource(GetJS, '/style/script.js')
+api.add_resource(GetCSS, '/style/style.css')
 """Api resources"""
 
 """ Main """

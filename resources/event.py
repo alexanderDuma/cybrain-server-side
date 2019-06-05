@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from models.event import EventModel
 from sqlalchemy import text
-from flask import request, render_template, make_response
+from flask import request, render_template, make_response, send_file, send_from_directory
 import json
 from db import db
 
@@ -231,3 +231,22 @@ class Login(Resource):
     def get(self):
         headers = {'content-type': 'text/html'}
         return make_response(render_template("index.html"), 200, headers)
+
+
+class GetImage(Resource):
+    def get(self):
+        return send_file(r'C:\Users\brain\PycharmProjects\cybrain-server-side\templates\imgs\cybrain_logo.jpg', mimetype='image/gif')
+
+
+class GetJS(Resource):
+    def get(self):
+        # return send_from_directory("C:/Users/brain/PycharmProjects/cybrain-server-side/templates/style/", "script.js")
+        headers = {'content-type': 'text/js'}
+        return send_file(r'C:\Users\brain\PycharmProjects\cybrain-server-side\templates\style\script.js',headers)
+
+
+class GetCSS(Resource):
+    def get(self):
+        # return send_from_directory("C:/Users/brain/PycharmProjects/cybrain-server-side/templates/style/", "style.css")
+        headers = {'content-type': 'text/css'}
+        return send_file(r'C:\Users\brain\PycharmProjects\cybrain-server-side\templates\style\style.css', headers)
