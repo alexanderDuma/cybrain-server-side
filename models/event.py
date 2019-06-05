@@ -4,7 +4,7 @@ from db import db
 
 
 class EventModel(db.Model):
-    __tablename__='Events'
+    __tablename__= 'Events'
 
     """ Attribures """
     eventID = db.Column(db.Integer, primary_key=True)

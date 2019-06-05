@@ -1,8 +1,9 @@
 from flask_restful import Resource
 from models.event import EventModel
-
+from sqlalchemy import text
 from flask import request, render_template, make_response
 import json
+from db import db
 
 
 class Event(Resource):
@@ -94,29 +95,6 @@ class Event(Resource):
 
     """ PUT """
 
-class GetEventByParamaters(Resource):
-    """ GET """
-    def get(self, query):
-
-        date = request.args.get('date')
-        adv_origin = request.args.get('adv_origin')
-        adv_organization = request.args.get('adv_organization')
-        adv_camp = request.args.get('adv_camp')
-        target_sector = request.args.get('target_sector')
-        target_name = request.args.get('target_name')
-        target_origin = request.args.get('target_origin')
-        reference = request.args.get('reference')
-        status = request.args.get('status')
-        details = request.args.get('details')
-        type = request.args.get('type')
-        reporter = request.args.get('reporter')
-
-        if date:
-            response = EventModel.query.filter_by(date=date)
-        if adv_origin:
-            response = EventModel.query.filter_by(adv_origin=adv_origin)
-
-
 class eventList(Resource):
     """ GET """
     def get(self):
@@ -136,41 +114,62 @@ class getLastEvent(Resource):
 class getByParameters(Resource):
     """ GET """
     def get(self):
-        dic = []
+        dic = {}
         date = request.args.get('date')
         if date:
-            dic.append({"date": date})
+            dic["date"] = date.split(',')
         adv_origin = request.args.get('adv_origin')
         if adv_origin:
-            dic.append({"adv_origin": adv_origin})
+            dic["adv_origin"] = adv_origin.split(',')
         adv_organization = request.args.get('adv_organization')
         if adv_organization:
-            dic.append({"adv_organization": adv_organization})
+            dic["adv_organization"] = adv_organization.split(',')
         adv_camp = request.args.get('adv_camp')
         if adv_camp:
-            dic.append({"adv_camp": adv_camp})
+            dic["adv_camp"] = adv_camp.split(',')
         target_sector = request.args.get('target_sector')
         if target_sector:
-            dic.append({"target_sector": target_sector})
+            dic["target_sector"] = target_sector.split(',')
         target_name = request.args.get('target_name')
         if target_name:
-            dic.append({"target_name": target_name})
+            dic["target_name"] = target_name.split(',')
         target_origin = request.args.get('target_origin')
         if target_origin:
-            dic.append({"target_origin": target_origin})
+            dic["target_origin"] = target_origin.split(',')
         reference = request.args.get('reference')
         if reference:
-            dic.append({"reference": reference})
+            dic["reference"] = reference.split(',')
         status = request.args.get('status')
         if status:
-            dic.append({"status": status})
+            dic["status"] = status.split(',')
         details = request.args.get('details')
         if details:
-            dic.append({"details": details})
+            dic["details"] = details.split(',')
         type = request.args.get('type')
         if type:
-            dic.append({"type": type})
+            dic["type"] = type.split(',')
+        reporter = request.args.get('reporter')
+        if reporter:
+            dic["reporter"] = reporter.split(',')
 
-        # return dic
-        return EventModel.query.filter()
+
+        query = "SELECT * FROM data.Events WHERE "
+        for k,v in dic.items():
+            if len(v) == 1:
+                query += f"{k} = '{v[0]}' AND "
+            else:
+                query += '('
+                for value in v:
+                    query += f"{k} = '{value}' OR "
+                query = query[:-4]
+                query += ") AND "
+        query = query[:-5]
+
+        sql_query = text(query)
+        result = db.engine.execute(sql_query)
+        events = [EventModel.find_by_id(row[0]).json() for row in result]
+        headers = {'content-type': 'text/html'}
+
+        return make_response(render_template("event_feed.html", events=events), 200, headers)
+        # return query
     """ GET """
