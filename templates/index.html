@@ -30,7 +30,7 @@
 
                 <div class="panel-body" >
 
-                    <form name="form" id="form" class="form-horizontal" enctype="multipart/form-data" action="/login" method="POST">
+                    <form name="form" id="form" class="form-horizontal" enctype="multipart/form-data" action="/events" method="GET">
 
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
@@ -45,7 +45,7 @@
                         <div class="form-group">
                             <!-- Button -->
                             <div class="col-sm-12 controls">
-                                <button type="submit" href="#" class="btn btn-primary pull-right"><i class="glyphicon glyphicon-log-in"></i> Log in</button>
+                                <button type="submit" onclick="window.location.href = 'http://192.168.1.114:5000/events';" href="#" class="btn btn-primary pull-right"><i class="glyphicon glyphicon-log-in"></i> Log in</button>
                             </div>
                         </div>
 
