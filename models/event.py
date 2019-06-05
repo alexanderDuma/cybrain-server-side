@@ -72,12 +72,57 @@ class EventModel(db.Model):
 
     """ Class methods """
     @classmethod
-    def find_by_reference(cls, reference):
-        return cls.query.filter_by(reference=reference).first()
-
-    @classmethod
     def find_by_id(cls, eventID):
         return cls.query.filter_by(eventID=eventID).first()
+
+    @classmethod
+    def find_by_date(cls, date):
+        return cls.query.filter_by(date=date).all()
+
+    @classmethod
+    def find_by_adv_origin(cls, adv_origin):
+        return cls.query.filter_by(adv_origin=adv_origin).all()
+
+    @classmethod
+    def find_by_adv_organization(cls, adv_organization):
+        return cls.query.filter_by(adv_organization=adv_organization).all()
+
+    @classmethod
+    def find_by_adv_camp(cls, adv_camp):
+        return cls.query.filter_by(adv_camp=adv_camp).all()
+
+    @classmethod
+    def find_by_target_sector(cls, target_sector):
+        return cls.query.filter_by(target_sector=target_sector).all()
+
+    @classmethod
+    def find_by_target_name(cls, target_name):
+        return cls.query.filter_by(target_name=target_name).all()
+
+    @classmethod
+    def find_by_origin(cls, target_origin):
+        return cls.query.filter_by(target_origin=target_origin).all()
+
+    @classmethod
+    def find_by_reference(cls, reference):
+        return cls.query.filter_by(reference=reference).all()
+
+    @classmethod
+    def find_by_status(cls, status):
+        return cls.query.filter_by(status=status).all()
+
+    @classmethod
+    def find_by_details(cls, details):
+        return cls.query.filter_by(details=details).all()
+
+    @classmethod
+    def find_by_type(cls, type):
+        return cls.query.filter_by(type=type).all()
+
+    @classmethod
+    def find_by_reporter(cls, reporter):
+        return cls.query.filter_by(reporter=reporter).all()
+
     """ Class methods """
 
     """ DB methods """
