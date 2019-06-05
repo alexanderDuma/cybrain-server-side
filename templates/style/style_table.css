@@ -10,6 +10,10 @@ a.del
     line-height:10px;
 }
 
+.form-control {
+    width:500%;
+}
+
 a.edit
 {
     padding-left:10px;

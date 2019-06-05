@@ -69,7 +69,7 @@ class Event(Resource):
                 return {"message": "An error occurred inserting the item."}, 500
             events = [event.json() for event in EventModel.query.order_by(EventModel.eventID).all()]
             headers = {'content-type': 'text/html'}
-            return make_response(render_template("event_feed.html", events=events), 200, headers)
+            return make_response(render_template("events.html", events=events), 200, headers)
             # return event.json()
         return {'message': 'event by that reference already exists'}, 400
     """ POST """
@@ -95,12 +95,19 @@ class Event(Resource):
 
     """ PUT """
 
+
+class EventFeed(Resource):
+    def get(self):
+        headers = {'content-type': 'text/html'}
+        return make_response(render_template("event_feed.html"), 200, headers)
+
+
 class eventList(Resource):
     """ GET """
     def get(self):
         events = [event.json() for event in EventModel.query.order_by(EventModel.eventID).all()]
         headers = {'content-type': 'text/html'}
-        return make_response(render_template("event_feed.html", events=events), 200, headers)
+        return make_response(render_template("events.html", events=events), 200, headers)
     """ GET """
 
 
@@ -201,5 +208,26 @@ class getByParameters(Resource):
         events = [EventModel.find_by_id(row[0]).json() for row in result]
         headers = {'content-type': 'text/html'}
 
-        return make_response(render_template("event_feed.html", events=events), 200, headers)
+        return make_response(render_template("events.html", events=events), 200, headers)
     """ GET """
+
+
+class Dashboard(Resource):
+    def get(self):
+        result = {}
+        columns = ['date', 'adv_origin', 'adv_organization', 'adv_camp', 'target_sector', 'target_name',
+                   'target_origin', 'reference', 'status', 'details', 'type', 'reporter']
+        for column in columns:
+            query = f"SELECT DISTINCT {column} FROM data.Events"
+            sql_query = text(query)
+            result[column] = db.engine.execute(sql_query)
+            result[column] = [row[0] for row in result[column]]
+
+        headers = {'content-type': 'text/html'}
+        return make_response(render_template("dashboard.html",col_list=result), 200, headers)
+
+
+class Login(Resource):
+    def get(self):
+        headers = {'content-type': 'text/html'}
+        return make_response(render_template("index.html"), 200, headers)
