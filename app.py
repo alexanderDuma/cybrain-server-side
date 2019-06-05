@@ -28,9 +28,9 @@ api.add_resource(eventList, '/events')
 api.add_resource(getByParameters, '/event/getByParameters')
 api.add_resource(getUniqueColumn, '/event/getUniqueColumn')
 api.add_resource(getAllUniqueColumns, '/event/getAllUniqueColumns')
-api.add_resource(EventFeed, '/event_feed.html')
-api.add_resource(Dashboard, '/dashboard.html')
-api.add_resource(Login, '/index.html')
+api.add_resource(EventFeed, '/event_feed')
+api.add_resource(Dashboard, '/dashboard')
+api.add_resource(Login, '/')
 """Api resources"""
 
 """ Main """
