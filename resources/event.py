@@ -57,13 +57,14 @@ class Event(Resource):
     """ POST """
     def post(self, query):
         event = self.parse_to_new_event(query)
-        if event:
+        currentEvent = EventModel.find_by_reference(event.reference)
+        if not currentEvent:
             try:
                 event.save_to_db()
             except:
                 return {"message": "An error occurred inserting the item."}, 500
             return event.json()
-        return {'message': 'event by that id already exists'}, 400
+        return {'message': 'event by that reference already exists'}, 400
     """ POST """
 
     """ DELETE """
