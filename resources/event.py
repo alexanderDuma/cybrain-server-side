@@ -111,6 +111,37 @@ class getLastEvent(Resource):
     """ GET """
 
 
+class getUniqueColumn(Resource):
+    """ GET """
+    def get(self):
+        column = request.args.get('column')
+        if column:
+            query = f"SELECT DISTINCT {column} FROM data.Events"
+            sql_query = text(query)
+            result = db.engine.execute(sql_query)
+            names = [row[0] for row in result]
+
+            return names
+        else:
+            return {'message': 'No such column.'}
+    """ GET """
+
+
+class getAllUniqueColumns(Resource):
+    """ GET """
+    def get(self):
+        result = {}
+        columns = ['date', 'adv_origin', 'adv_organization', 'adv_camp', 'target_sector', 'target_name', 'target_origin', 'reference', 'status', 'details', 'type', 'reporter']
+        for column in columns:
+            query = f"SELECT DISTINCT {column} FROM data.Events"
+            sql_query = text(query)
+            result[column] = db.engine.execute(sql_query)
+            result[column] = [row[0] for row in result[column]]
+
+        return result
+    """ GET """
+
+
 class getByParameters(Resource):
     """ GET """
     def get(self):
@@ -171,5 +202,4 @@ class getByParameters(Resource):
         headers = {'content-type': 'text/html'}
 
         return make_response(render_template("event_feed.html", events=events), 200, headers)
-        # return query
     """ GET """
