@@ -9,8 +9,8 @@ from resources.event import *
 """Config"""
 app = Flask(__name__)
 """ will look for DATABAE_URL, if not found will take second arg. """
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///data.db')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://westbrook135:1q2w3e4r!@localhost/data'
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 api = Api(app)
 """Config"""
 
