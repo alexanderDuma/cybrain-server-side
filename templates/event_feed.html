@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>הזנת דיווח</title>
+    <link rel="stylesheet" type="text/css" href="/style/style_table.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Bootstrap 4 Table with Hover States</title>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
     <script>
 
     function parseHTML(html) {
@@ -20,6 +19,20 @@
 
     function releaseEdit(id){
             var raw = document.getElementById(id);
+
+                var raw = document.getElementById(id);
+                let date = document.getElementById("date".concat(id.toString())).innerHTML;
+                var adv_origin = document.getElementById("adv_origin".concat(id.toString())).innerHTML;
+                var adv_organization = document.getElementById("adv_organization".concat(id.toString())).innerHTML;
+                var adv_camp = document.getElementById("adv_camp".concat(id.toString())).innerHTML;
+                var target_sector = document.getElementById("target_sector".concat(id.toString())).innerHTML;
+                var target_name = document.getElementById("target_name".concat(id.toString())).innerHTML;
+                var target_origin = document.getElementById("target_origin".concat(id.toString())).innerHTML;
+                var type = document.getElementById("type".concat(id.toString())).innerHTML;
+                var reference = document.getElementById("reference".concat(id.toString())).innerHTML;
+                var reporter = document.getElementById("reporter".concat(id.toString())).innerHTML;
+                var status = document.getElementById("status".concat(id.toString())).innerHTML;
+
            /*remove all childes of the element*/
             while (raw.firstChild) {
                 raw.removeChild(raw.firstChild);
@@ -27,6 +40,51 @@
             var open = '<td>';
             var close = '</td>';
             raw.appendChild(parseHTML(open.concat(id).concat(close)));
+            raw.appendChild(parseHTML(open.concat('<input type="date".concat(id.toString()) name="date"></input>').concat(close)));
+            raw.appendChild(parseHTML(open.concat('<input id="adv_origin".concat(id.toString()) type="text" placeholder="* מקור" value="" />').concat(close)));
+            raw.appendChild(parseHTML(open.concat('<input id="adv_organization".concat(id.toString()) type="text" placeholder="ארגון" value="" />').concat(close)));
+           raw.appendChild(parseHTML(open.concat('<input id="adv_camp".concat(id.toString()) type="text" placeholder="מערך" value="" />').concat(close)));
+           raw.appendChild(parseHTML(open.concat('<input id="target_sector".concat(id.toString()) type="text" placeholder="* מגזר" value="" />').concat(close)));
+           raw.appendChild(parseHTML(open.concat('<input id="target_name".concat(id.toString()) type="text" placeholder="שם חברה" value="" />').concat(close)));
+         raw.appendChild(parseHTML(open.concat('<input id="target_origin".concat(id.toString()) type="text" placeholder="מדינה נתקפת" value="" />').concat(close)));
+        raw.appendChild(parseHTML(open.concat('<select id="type" size="3"><option value="אל הנכס">אל הנכס</option><option value="בנכס">בנכס</option><option value="אחר">אחר</option></select>').concat(close)));
+         raw.appendChild(parseHTML(open.concat('<input id="details".concat(id.toString()) type="text" placeholder="פירוט" value="" />').concat(close)));
+        raw.appendChild(parseHTML(open.concat('<input id="reference".concat(id.toString()) type="text" placeholder="סימוכין" value="" />').concat(close)));
+        raw.appendChild(parseHTML(open.concat('<input id="reporter".concat(id.toString()) type="text" placeholder="מדווח" value="" />').concat(close)));
+        raw.appendChild(parseHTML(open.concat('<input id="status".concat(id.toString()) type="text" placeholder="דיווח" value="דיווח" style="display:none;"/>').concat(close)));
+        raw.appendChild(parseHTML(open.concat('<button type="button" onclick="saveChanges('.concat(id.toString()).concat('">Save</button>')).concat(close)));
+        raw.appendChild(parseHTML(open.concat('<button type="button" onclick="location.reload()">Cancel</button>').concat(close)));
+
+
+        };
+
+        function saveChanges(id){
+                var raw = document.getElementById(id);
+                var date = document.getElementById("date".concat(id.toString())).innerHTML;
+                var adv_origin = document.getElementById("adv_origin".concat(id.toString())).innerHTML;
+                var adv_organization = document.getElementById("adv_organization".concat(id.toString())).innerHTML;
+                var adv_camp = document.getElementById("adv_camp".concat(id.toString())).innerHTML;
+                var target_sector = document.getElementById("target_sector".concat(id.toString())).innerHTML;
+                var target_name = document.getElementById("target_name".concat(id.toString())).innerHTML;
+                var target_origin = document.getElementById("target_origin".concat(id.toString())).innerHTML;
+                var type = document.getElementById("type".concat(id.toString())).innerHTML;
+                var reference = document.getElementById("reference".concat(id.toString())).innerHTML;
+                var reporter = document.getElementById("reporter".concat(id.toString())).innerHTML;
+                var status = document.getElementById("status".concat(id.toString())).innerHTML;
+
+                xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("demo").innerHTML = this.responseText;
+                }else{
+                    alert('Faild to update event!');
+                    location.reload();
+                }
+                };
+                params = ""
+                xhttp.open("PUT", "/event/".concat(id).concat(params), true);
+                xhttp.send();
+
+
 
         };
 
@@ -40,11 +98,11 @@
 </head>
 <body dir="rtl">
 
-<div class="container login-container">
+<div class="my-container" style="margin-right:0px">
             <div class="row">
-                <div class="col-md-6 login-form-1">
+                <div class="col-md-6">
                     <h3>הזן דיווח</h3>
-                    <form action="http://192.168.1.114:5000/event/newevent" method="post">
+                    <form action="http://127.0.0.1:5000/event/newevent" method="post">
                         <div class="form-group">
                             <h4>יריב</h4>
                             <input name="adv_origin" type="text" class="form-control" placeholder="* מקור" value="" />
@@ -89,48 +147,48 @@
 
 
     <!--    events table-->
-        <div class="bs-example">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>תאריך</th>
-                        <th>מקור תקיפה</th>
-                        <th>יעד</th>
-                        <th>מערך</th>
-                        <th>מגזר נתקף</th>
-                        <th>שם נתקף</th>
-                        <th>נתקף ישראלי?</th>
-                        <th>סוג תקיפה</th>
-                        <th>פרטים</th>
-                        <th>סימוכין</th>
-                        <th>מדווח</th>
-                        <th>סטטוס דיווח</th>
-                        <th>עריכה</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for event in events %}
-                        <tr id="{{event.eventID}}">
-                            <td>{{event.eventID}}</td>
-                            <td>{{event.date}}</td>
-                            <td>{{event.adv_origin}}</td>
-                            <td>{{event.adv_organization}}</td>
-                            <td>{{event.adv_camp}}</td>
-                            <td>{{event.target_sector}}</td>
-                            <td>{{event.target_name}}</td>
-                            <td>{{event.target_origin}}</td>
-                            <td>{{event.type}}</td>
-                            <td>{{event.details}}</td>
-                            <td>{{event.reference}}</td>
-                            <td>{{event.reporter}}</td>
-                            <td>{{event.status}}</td>
-                            <td><button type="button" onclick="releaseEdit({{event.eventID}})">Edit</button></td>
-                        </tr>
-                    {% endfor %}
+<!--        <div class="bs-example">-->
+<!--            <table class="table table-striped">-->
+<!--                <thead>-->
+<!--                    <tr class="row-name">-->
+<!--                        <th>#</th>-->
+<!--                        <th>תאריך</th>-->
+<!--                        <th>מקור תקיפה</th>-->
+<!--                        <th>יעד</th>-->
+<!--                        <th>מערך</th>-->
+<!--                        <th>מגזר נתקף</th>-->
+<!--                        <th>שם נתקף</th>-->
+<!--                        <th>נתקף ישראלי?</th>-->
+<!--                        <th>סוג תקיפה</th>-->
+<!--                        <th>פרטים</th>-->
+<!--                        <th>סימוכין</th>-->
+<!--                        <th>מדווח</th>-->
+<!--                        <th>סטטוס דיווח</th>-->
+<!--                        <th>עריכה</th>-->
+<!--                    </tr>-->
+<!--                </thead>-->
+<!--                <tbody>-->
+<!--                    {% for event in events %}-->
+<!--                        <tr id="{{event.eventID}}" class="row-content">-->
+<!--                            <td>{{event.eventID}}</td>-->
+<!--                            <td id="date{{event.eventID}}">{{event.date}}</td>-->
+<!--                            <td id="adv_origin{{event.eventID}}">{{event.adv_origin}}</td>-->
+<!--                            <td id="adv_organization{{event.eventID}}">{{event.adv_organization}}</td>-->
+<!--                            <td id="adv_camp{{event.eventID}}">{{event.adv_camp}}</td>-->
+<!--                            <td id="target_sector{{event.eventID}}">{{event.target_sector}}</td>-->
+<!--                            <td id="target_name{{event.eventID}}">{{event.target_name}}</td>-->
+<!--                            <td id="target_origin{{event.eventID}}">{{event.target_origin}}</td>-->
+<!--                            <td id="type{{event.eventID}}">{{event.type}}</td>-->
+<!--                            <td id="details{{event.eventID}}">{{event.details}}</td>-->
+<!--                            <td id="reference{{event.eventID}}">{{event.reference}}</td>-->
+<!--                            <td id="reporter{{event.eventID}}">{{event.reporter}}</td>-->
+<!--                            <td id="status{{event.eventID}}">{{event.status}}</td>-->
+<!--                            <td><button type="button" onclick="releaseEdit({{event.eventID}})">Edit</button></td>-->
+<!--                        </tr>-->
+<!--                    {% endfor %}-->
 
-                </tbody>
-            </table>
-        </div>
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </div>-->
     </body>
 </html>
