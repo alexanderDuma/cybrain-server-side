@@ -95,9 +95,52 @@ class eventList(Resource):
         return {'events': [event.json() for event in EventModel.query.order_by(EventModel.eventID).all()]}
     """ GET """
 
-# # # # # #
-# # # # # class eventByDate(Resource):
-# # # #     """ GET """
-# # #     def get(self, query):
-# #         return {'event': [event.json() for event in EventModel.find_by_date(query).all()]}
-#     """ GET """
+
+class getLastEvent(Resource):
+    """ GET """
+    def get(self):
+        return EventModel.query.order_by(EventModel.id.desc()).first()
+    """ GET """
+
+
+class getByParameters(Resource):
+    """ GET """
+    def get(self):
+        dic = []
+        date = request.args.get('date')
+        if date:
+            dic.append({"date": date})
+        adv_origin = request.args.get('adv_origin')
+        if adv_origin:
+            dic.append({"adv_origin": adv_origin})
+        adv_organization = request.args.get('adv_organization')
+        if adv_organization:
+            dic.append({"adv_organization": adv_organization})
+        adv_camp = request.args.get('adv_camp')
+        if adv_camp:
+            dic.append({"adv_camp": adv_camp})
+        target_sector = request.args.get('target_sector')
+        if target_sector:
+            dic.append({"target_sector": target_sector})
+        target_name = request.args.get('target_name')
+        if target_name:
+            dic.append({"target_name": target_name})
+        target_origin = request.args.get('target_origin')
+        if target_origin:
+            dic.append({"target_origin": target_origin})
+        reference = request.args.get('reference')
+        if reference:
+            dic.append({"reference": reference})
+        status = request.args.get('status')
+        if status:
+            dic.append({"status": status})
+        details = request.args.get('details')
+        if details:
+            dic.append({"details": details})
+        type = request.args.get('type')
+        if type:
+            dic.append({"type": type})
+
+        # return dic
+        return EventModel.query.filter()
+    """ GET """

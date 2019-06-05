@@ -28,6 +28,7 @@ def create_tables():
 """Api resources"""
 api.add_resource(Event, '/event/<string:query>')
 api.add_resource(eventList, '/events')
+api.add_resource(getByParameters, '/event/getByParameters')
 """Api resources"""
 
 """ Main """
