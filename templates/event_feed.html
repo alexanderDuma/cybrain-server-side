@@ -2,6 +2,46 @@
 <html lang="he">
 <head>
     <meta charset="UTF-8">
+     <style>
+body {font-family: Arial;}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+</style>
     <title>הזנת דיווח</title>
     <link rel="stylesheet" type="text/css" href="/style/style_table.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -98,11 +138,11 @@
 </head>
 <body dir="rtl">
 
-<div class="my-container" style="position:absolute">
+<div class="my-container" style="margin-right:0px">
             <div class="row">
                 <div class="col-md-6">
                     <h3>הזן דיווח</h3>
-                    <form action="http://192.168.1.114:5000/event/newevent" method="post">
+                    <form action="http://127.0.0.1:5000/event/newevent" method="post">
                         <div class="form-group">
                             <h4>יריב</h4>
                             <input name="adv_origin" type="text" class="form-control" placeholder="* מקור" value="" />
